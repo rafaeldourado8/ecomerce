@@ -1,0 +1,15 @@
+asgiref
+click
+fastapi
+h11
+httptools
+pydantic
+python-dotenv
+PyYAML
+starlette
+typing-extensions
+uvicorn
+watchgod
+websockets
+SQLAlchemy
+psycopg2
