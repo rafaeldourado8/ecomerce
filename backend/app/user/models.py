@@ -14,7 +14,9 @@ class User(Base):
 
 
     def __repr__(self) -> str:
+        '''Representacao em string do objeto User'''
         return f"<User(id={self.id!r}, name={self.name!r}, email={self.email!r})>"
     
     def check_password(self, password):
+        '''Verifica se a senha fornecida corresponde a senha armazenada'''
         return hashing.verify_password(password, self.password)
