@@ -1,15 +1,6 @@
 from fastapi import FastAPI
+from app.user import router as user_router
 
-app = FastAPI()
+app = FastAPI(title="EcomerceApp", version="0.0.1")
 
-@app.get("/")
-async def root():
-    return {"message":"Hello World!"}
-
-@app.get("/root/{name}")
-async def say_hello(name: str):
-    return {"message":f"Hello {name}"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host='0.0.0.0', port=8000, reload=True)
+app.include_router(user_router.router)
