@@ -11,6 +11,7 @@ __pycache__/
 .coverage
 
 # Ambientes Virtuais
+.env
 venv/
 .venv/
 env/
@@ -18,9 +19,6 @@ env/
 ENV/
 .tox/
 
-# Arquivos de Segredos e Configuração de Ambiente
-# !! Descomente a linha abaixo se você usa .env para guardar segredos
-# .env
 
 # Arquivos de IDEs
 .idea/
