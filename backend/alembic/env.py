@@ -15,13 +15,19 @@ import sys
 # __file__ é o caminho para este arquivo (backend/alembic/env.py)
 # os.path.dirname(__file__) é a pasta 'backend/alembic'
 # os.path.join(..., '..') "sobe" um nível para 'backend'
+# Assumindo que seu app está em /app, subimos um nível para /app
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # ---------------------------------------------------
 
 # --- AJUSTE 3: Importar a Base, URL e Modelos ---
 # Agora que o path está correto, podemos importar do seu app
 from app.db import Base, DATABASE_URL
-from app.user import models  # Importa seus modelos para o Base.metadata
+
+# Importamos os MÓDULOS que contêm os modelos.
+# Isso garante que todas as tabelas sejam "conhecidas"
+# pelo SQLAlchemy Base antes de gerarmos a migração.
+from app.user import models
+from app.products import models
 # ------------------------------------------------
 
 
