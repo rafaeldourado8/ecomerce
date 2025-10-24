@@ -12,24 +12,24 @@ API Restful para um sistema de e-commerce, construída com Python, FastAPI, Dock
 
 * **Python 3.10:** Linguagem principal do projeto.
 * **FastAPI:** Framework web de alta performance para a construção da API.
-* **SQLAlchemy:** ORM (Object Relational Mapper) para interação com o banco de dados.
+* **SQLAlchemy (Asyncio):** ORM para interação assíncrona com o banco de dados.
 * **PostgreSQL:** Banco de dados relacional.
 * **Alembic:** Ferramenta para gerenciamento de migrações (migrations) do banco de dados.
 * **Docker:** Utilizado para criar ambientes consistentes de desenvolvimento e produção (conteinerização).
 
 ## Status do Projeto
 
-**Em desenvolvimento.** A arquitetura inicial (API, Banco de Dados e Docker) está configurada. Os endpoints CRUD (Create, Read, Update, Delete) para as entidades principais já foram implementados e estão documentados via Swagger UI.
+**Em desenvolvimento.** A arquitetura principal (API, Banco de Dados e Docker) está configurada. Os endpoints CRUD para Usuários, Produtos e Categorias, bem como o fluxo de Carrinho e Pedidos, estão implementados.
 
 ## Funcionalidades Implementadas (v1.0)
 
-A API atualmente suporta as operações CRUD básicas para as seguintes entidades:
+A API atualmente suporta as operações para as seguintes entidades:
 
 ### 👤 Usuários
-* `GET /users/`: Listar todos os usuários
-* `POST /users/`: Criar um novo usuário
-* `GET /users/{user_id}`: Obter um usuário específico por ID
-* `DELETE /users/{user_id}`: Deletar um usuário por ID
+* `GET /user/`: Listar todos os usuários
+* `POST /user/`: Criar um novo usuário
+* `GET /user/{user_id}`: Obter um usuário específico por ID
+* `DELETE /user/{user_id}`: Deletar um usuário por ID
 
 ### 📦 Produtos
 * `GET /products/`: Listar todos os produtos
@@ -45,11 +45,20 @@ A API atualmente suporta as operações CRUD básicas para as seguintes entidade
 * `PUT /categories/{category_id}`: Atualizar uma categoria por ID
 * `DELETE /categories/{category_id}`: Deletar uma categoria por ID
 
+### 🛒 Carrinho de Compras
+* `POST /cart/add/{product_id}`: Adicionar um produto ao carrinho (por email de usuário)
+* `GET /cart/{email}`: Visualizar o carrinho do usuário
+* `DELETE /cart/{cart_item_id}`: Remover um item específico do carrinho
+
+### 🧾 Pedidos (Orders)
+* `POST /orders/`: Criar um pedido a partir do carrinho (por email de usuário)
+* `GET /orders/`: Listar todos os pedidos de um usuário
+* `GET /orders/{order_id}`: Obter detalhes de um pedido específico
+
 ## Próximos Passos (Roadmap)
 
 As próximas funcionalidades planejadas para a API são:
 
 * [ ] **Autenticação de Usuário:** Implementação de login e proteção de rotas com JWT (JSON Web Tokens).
-* [ ] **Sistema de Carrinho de Compras:** Rotas para adicionar, remover e visualizar itens no carrinho.
-* [ ] **Sistema de Pedidos (Orders):** Rotas para gerenciamento de pedidos.
-* [ ] **Relacionamentos:** Refinar os relacionamentos entre Produtos, Categorias e Pedidos no banco de dados.
+* [ ] **Estoque (Qtd):** Implementar a lógica para diminuir a `qtd` do `Product` quando um `Order` for criado.
+* [ ] **Testes:** Adicionar testes unitários e de integração (Pytest).
