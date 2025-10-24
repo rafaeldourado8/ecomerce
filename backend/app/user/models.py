@@ -12,6 +12,7 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False)
     password = Column(String(255))
     cart = Relationship("Cart", back_populates="user_cart", uselist=False)
+    orders = Relationship("Order", back_populates="user")
 
 
     def __repr__(self) -> str:
