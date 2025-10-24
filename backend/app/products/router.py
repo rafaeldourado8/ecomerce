@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, Response, HTTPException
 from typing import List
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from app import db
 from . import services
 from . import schema
@@ -10,16 +10,16 @@ from . import validator
 products_router = APIRouter(tags=['Products'], prefix='/products')
 
 @products_router.post('/', status_code=status.HTTP_201_CREATED, response_model=schema.ShowProduct)
-async def create_product(request: schema.Product, database: Session = Depends(db.get_db)):
+async def create_product(request: schema.Product, database: AsyncSession = Depends(db.get_db)):
     '''Funcao para criar um novo produto'''
     
-    if not validator.verify_category_id_exist(request.category_id, database):
+    if not await validator.verify_category_id_exist(request.category_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Categoria com id {request.category_id} não encontrada."
         )
 
-    if validator.verify_product_exist(request.name, database):
+    if await validator.verify_product_exist(request.name, database):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Produto com o nome '{request.name}' já existe."
@@ -30,14 +30,14 @@ async def create_product(request: schema.Product, database: Session = Depends(db
 
 
 @products_router.get('/', response_model=List[schema.ShowProduct], status_code=status.HTTP_200_OK)
-async def get_all_products(database: Session = Depends(db.get_db)):
+async def get_all_products(database: AsyncSession = Depends(db.get_db)):
     '''Funcao para obter todos os produtos'''
     products = await services.list_all_products(database)
     return products
 
 
 @products_router.get('/{product_id}', response_model=schema.ShowProduct, status_code=status.HTTP_200_OK)
-async def get_product_by_id(product_id: int, database: Session = Depends(db.get_db
+async def get_product_by_id(product_id: int, database: AsyncSession = Depends(db.get_db
 )):
     '''Funcao para obter um produto pelo ID'''
     product = await services.get_product_by_id(product_id, database)
@@ -51,11 +51,11 @@ async def get_product_by_id(product_id: int, database: Session = Depends(db.get_
 
 
 @products_router.delete('/{product_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_product_by_id(product_id: int, database: Session = Depends(db.get_db
+async def delete_product_by_id(product_id: int, database: AsyncSession = Depends(db.get_db
 )):
     '''Funcao para deletar um produto pelo ID'''
     
-    if not validator.verify_product_id_exist(product_id, database):
+    if not await validator.verify_product_id_exist(product_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Produto com id {product_id} não encontrado."
@@ -69,17 +69,17 @@ async def delete_product_by_id(product_id: int, database: Session = Depends(db.g
 async def update_product_by_id(
     product_id: int, 
     request: schema.UpdateProduct,
-    database: Session = Depends(db.get_db)
+    database: AsyncSession = Depends(db.get_db)
 ):
     '''Funcao para atualizar um produto pelo ID'''
 
-    if not validator.verify_product_id_exist(product_id, database):
+    if not await validator.verify_product_id_exist(product_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Produto com id {product_id} não encontrado."
         )
     
-    if not validator.verify_category_id_exist(request.category_id, database):
+    if not await validator.verify_category_id_exist(request.category_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Categoria com id {request.category_id} não encontrada."
@@ -92,10 +92,10 @@ async def update_product_by_id(
 categories_router = APIRouter(tags=['Categories'], prefix='/categories')
 
 @categories_router.post('/', status_code=status.HTTP_201_CREATED, response_model=schema.ShowCategory)
-async def create_category(request: schema.Category, database: Session = Depends(db.get_db)):
+async def create_category(request: schema.Category, database: AsyncSession = Depends(db.get_db)):
     '''Funcao para criar uma nova categoria'''
     
-    if validator.verify_category_name_exist(request.name, database):
+    if await validator.verify_category_name_exist(request.name, database):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Categoria com o nome '{request.name}' já existe."
@@ -105,12 +105,12 @@ async def create_category(request: schema.Category, database: Session = Depends(
     return new_category
 
 @categories_router.get('/', response_model=List[schema.ShowCategory], status_code=status.HTTP_200_OK)
-async def get_all_categories(database: Session = Depends(db.get_db)):
+async def get_all_categories(database: AsyncSession = Depends(db.get_db)):
     '''Funcao para obter todas as categorias'''
     return await services.list_all_categories(database)
 
 @categories_router.get('/{category_id}', response_model=schema.ShowCategory, status_code=status.HTTP_200_OK)
-async def get_category_by_id(category_id: int, database: Session = Depends(db.get_db)):
+async def get_category_by_id(category_id: int, database: AsyncSession = Depends(db.get_db)):
     '''Funcao para obter uma categoria pelo ID'''
     category = await services.get_category_by_id(category_id, database)
     
@@ -122,10 +122,10 @@ async def get_category_by_id(category_id: int, database: Session = Depends(db.ge
     return category
 
 @categories_router.delete('/{category_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_category_by_id(category_id: int, database: Session = Depends(db.get_db)):
+async def delete_category_by_id(category_id: int, database: AsyncSession = Depends(db.get_db)):
     '''Funcao para deletar uma categoria pelo ID'''
     
-    if not validator.verify_category_id_exist(category_id, database):
+    if not await validator.verify_category_id_exist(category_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Categoria com id {category_id} não encontrada."
@@ -138,17 +138,17 @@ async def delete_category_by_id(category_id: int, database: Session = Depends(db
 async def update_category_by_id(
     category_id: int, 
     request: schema.Category, 
-    database: Session = Depends(db.get_db)
+    database: AsyncSession = Depends(db.get_db)
 ):
     '''Funcao para atualizar uma categoria pelo ID'''
 
-    if not validator.verify_category_id_exist(category_id, database):
+    if not await validator.verify_category_id_exist(category_id, database):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Categoria com id {category_id} não encontrada."
         )
     
-    existing_category = validator.verify_category_name_exist(request.name, database)
+    existing_category = await validator.verify_category_name_exist(request.name, database)
     if existing_category and existing_category.id != category_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

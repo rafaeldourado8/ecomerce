@@ -1,18 +1,27 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from typing import Optional
 
 from . models import Product, Category 
 
-def verify_product_exist(product_name: str, db_session: Session) -> Optional[Product]:
-    return db_session.query(Product).filter(Product.name == product_name).first()
+async def verify_product_exist(product_name: str, db_session: AsyncSession) -> Optional[Product]:
+    query = select(Product).where(Product.name == product_name)
+    result = await db_session.execute(query)
+    return result.scalars().first()
 
-def verify_product_id_exist(product_id: int, db_session: Session) -> Optional[Product]:
-    return db_session.query(Product).filter(Product.id == product_id).first()
+async def verify_product_id_exist(product_id: int, db_session: AsyncSession) -> Optional[Product]:
+    query = select(Product).where(Product.id == product_id)
+    result = await db_session.execute(query)
+    return result.scalars().first()
 
-def verify_category_id_exist(category_id: int, db_session: Session) -> bool:
-    category = db_session.query(Category).filter(Category.id == category_id).first()
+async def verify_category_id_exist(category_id: int, db_session: AsyncSession) -> bool:
+    query = select(Category).where(Category.id == category_id)
+    result = await db_session.execute(query)
+    category = result.scalars().first()
     return category is not None
 
-def verify_category_name_exist(category_name: str, db_session: Session) -> Optional[Category]:
+async def verify_category_name_exist(category_name: str, db_session: AsyncSession) -> Optional[Category]:
     '''Verifica se uma categoria já existe pelo nome'''
-    return db_session.query(Category).filter(Category.name == category_name).first()
+    query = select(Category).where(Category.name == category_name)
+    result = await db_session.execute(query)
+    return result.scalars().first()

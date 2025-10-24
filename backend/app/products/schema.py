@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Annotated, Optional
 
 class Category(BaseModel):
@@ -10,8 +10,7 @@ class ShowCategory(BaseModel):
     id: int
     name: str
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True) 
 
 class Product(BaseModel):
     '''Schema para criar um novo produto'''
@@ -28,10 +27,9 @@ class ShowProduct(BaseModel):
     qtd: int
     description: Optional[str] = None
     price: int
-    category: ShowCategory # Exibe a categoria aninhada
+    category: ShowCategory 
 
-    class Config:
-        from_attributes = True # 'orm_mode = True' do Pydantic v1
+    model_config = ConfigDict(from_attributes=True) 
 
 class UpdateProduct(BaseModel):
     '''Schema para atualizar um produto'''
@@ -44,5 +42,5 @@ class UpdateProduct(BaseModel):
 class ProductId(BaseModel):
     '''Schema para representar o ID do produto'''
     id: int
-    class Config:
-        from_attributes = True
+    
+    model_config = ConfigDict(from_attributes=True)

@@ -23,9 +23,8 @@ class Product(Base):
     price = Column(Integer, nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False) 
     category = relationship("Category", back_populates="products")
-    cart_items = relationship("CartItem", back_populates="products")
+    cart_items = relationship("CartItem", back_populates="product")
     
     def __repr__(self) -> str: 
         '''Representacao em string do objeto Product'''
         return f"<Product(id={self.id!r}, name={self.name!r}, price={self.price!r})>"
-    
