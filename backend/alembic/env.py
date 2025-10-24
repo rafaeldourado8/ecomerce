@@ -27,7 +27,8 @@ from app.db import Base, DATABASE_URL
 # Isso garante que todas as tabelas sejam "conhecidas"
 # pelo SQLAlchemy Base antes de gerarmos a migração.
 from app.user import models
-from app.products import models
+from app.products import models 
+from app.cart import models
 # ------------------------------------------------
 
 
@@ -107,3 +108,5 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
+

@@ -1,6 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.orm import declarative_base # declarative_base ainda é usado
 
 from . import config
 
@@ -9,17 +8,21 @@ DATABASE_NAME = config.DATABASE_NAME
 DATABASE_PASSWORD = config.DATABASE_PASSWORD
 DATABASE_HOST = config.DATABASE_HOST
 
-DATABASE_URL = f"postgresql+psycopg2://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
+DATABASE_URL = f"postgresql+asyncpg://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
 
-engine = create_engine(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL, echo=True) 
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+async_session = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False 
+)
 
 Base = declarative_base()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db() -> AsyncSession:
+    async with async_session() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
