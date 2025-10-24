@@ -27,6 +27,12 @@ async def retrieve_user_by_id(user_id: int, database) -> models.User:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.") 
     return user 
 
+async def get_user_filter_by_email(email: str, database) -> models.User:
+    user = database.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+    return user
+
 async def delete_user(user_id: int, database) -> None:
     user = await retrieve_user_by_id(user_id, database)
     database.delete(user)
