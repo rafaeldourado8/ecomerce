@@ -2,43 +2,45 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME:-postgres}
-      # A senha agora é lida diretamente da variável de ambiente
+      # Lê as variáveis do seu arquivo .env
+      POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD} 
-      POSTGRES_DB: ${DATABASE_NAME:-ecomerce}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Adiciona a verificação de saúde para o Postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
       
   api:
     build: ./backend
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    # Comando corrigido para rodar migrações (alembic) antes de iniciar a API
+    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
       - ./backend:/app
     ports:
       - "8000:8000"
     environment:
-      DATABASE_USERNAME: ${DATABASE_USERNAME:-postgres}
+      # Lê as variáveis do seu arquivo .env
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME:-ecomerce}
+      DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_HOST: db 
+    # Espera o 'db' ficar saudável antes de iniciar
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@email.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "5050:80"
-    depends_on:
-      - db 
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
+#
+# O serviço 'pgadmin' foi totalmente removido.
+#
 
 volumes:
   postgres_data:
-  pgadmin_data:
+# O volume 'pgadmin_data' foi totalmente removido.
