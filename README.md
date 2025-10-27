@@ -1,55 +1,104 @@
-# API Comércio Eletrônico
 
-API Restful para um sistema de e-commerce, construída com Python, FastAPI, Docker, SQLAlchemy e PostgreSQL. Este é um projeto de portfólio focado em boas práticas de desenvolvimento back-end.
+<h1 align="center">🛍️ EcommerceApp API</h1>
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+<p align="center">
+  <strong>API RESTful para um sistema de e-commerce, construída com Python, FastAPI, Docker, SQLAlchemy e PostgreSQL.</strong><br>
+  <em>Projeto de portfólio focado em boas práticas e arquitetura escalável.</em>
+</p>
 
-## Tecnologias Utilizadas
+---
 
-* **Python 3.10:** Linguagem principal do projeto.
-* **FastAPI:** Framework web de alta performance para a construção da API.
-* **SQLAlchemy:** ORM (Object Relational Mapper) para interação com o banco de dados.
-* **PostgreSQL:** Banco de dados relacional.
-* **Alembic:** Ferramenta para gerenciamento de migrações (migrations) do banco de dados.
-* **Docker:** Utilizado para criar ambientes consistentes de desenvolvimento e produção (conteinerização).
+## 🧱 Tecnologias Utilizadas
 
-## Status do Projeto
+| Tecnologia | Descrição |
+|-------------|------------|
+| 🐍 **Python 3.10** | Linguagem principal do projeto |
+| ⚡ **FastAPI** | Framework web de alta performance |
+| 🧠 **SQLAlchemy** | ORM para modelagem de banco de dados |
+| 🐘 **PostgreSQL** | Banco de dados relacional |
+| 🔁 **Alembic** | Gerenciamento de migrações |
+| 🐳 **Docker** | Containerização e ambiente consistente |
 
-**Em desenvolvimento.** A arquitetura inicial (API, Banco de Dados e Docker) está configurada. Os endpoints CRUD (Create, Read, Update, Delete) para as entidades principais já foram implementados e estão documentados via Swagger UI.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+  <img src="https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/>
+</p>
 
-## Funcionalidades Implementadas (v1.0)
+---
 
-A API atualmente suporta as operações CRUD básicas para as seguintes entidades:
+## ⚙️ Status do Projeto
 
-### 👤 Usuários
-* `GET /users/`: Listar todos os usuários
-* `POST /users/`: Criar um novo usuário
-* `GET /users/{user_id}`: Obter um usuário específico por ID
-* `DELETE /users/{user_id}`: Deletar um usuário por ID
+🟡 **Em desenvolvimento**  
+A arquitetura base (API + Banco de Dados + Docker) já está configurada.  
+Os endpoints CRUD principais e as **rotas de autenticação** já estão implementados e documentados via Swagger UI (`/docs`).
 
-### 📦 Produtos
-* `GET /products/`: Listar todos os produtos
-* `POST /products/`: Criar um novo produto
-* `GET /products/{product_id}`: Obter um produto específico por ID
-* `PUT /products/{product_id}`: Atualizar um produto por ID
-* `DELETE /products/{product_id}`: Deletar um produto por ID
+---
 
-### 🏷️ Categorias
-* `GET /categories/`: Listar todas as categorias
-* `POST /categories/`: Criar uma nova categoria
-* `GET /categories/{category_id}`: Obter uma categoria específica por ID
-* `PUT /categories/{category_id}`: Atualizar uma categoria por ID
-* `DELETE /categories/{category_id}`: Deletar uma categoria por ID
+## 🧩 Funcionalidades Implementadas — v1.0
 
-## Próximos Passos (Roadmap)
+### 👤 **Usuários**
+- `GET /users/` → Listar todos os usuários  
+- `POST /users/` → Criar um novo usuário  
+- `GET /users/{user_id}` → Buscar usuário por ID  
+- `DELETE /users/{user_id}` → Deletar usuário  
 
-As próximas funcionalidades planejadas para a API são:
+### 🔐 **Autenticação**
+- `POST /auth/signup` → Registrar novo usuário  
+- `POST /auth/login` → Fazer login e obter token JWT  
+- `GET /auth/me` → Obter informações do usuário autenticado  
 
-* [ ] **Autenticação de Usuário:** Implementação de login e proteção de rotas com JWT (JSON Web Tokens).
-* [ ] **Sistema de Carrinho de Compras:** Rotas para adicionar, remover e visualizar itens no carrinho.
-* [ ] **Sistema de Pedidos (Orders):** Rotas para gerenciamento de pedidos.
-* [ ] **Relacionamentos:** Refinar os relacionamentos entre Produtos, Categorias e Pedidos no banco de dados.
+### 📦 **Produtos**
+- `GET /products/` → Listar todos os produtos  
+- `POST /products/` → Criar novo produto  
+- `GET /products/{product_id}` → Buscar produto por ID  
+- `PUT /products/{product_id}` → Atualizar produto  
+- `DELETE /products/{product_id}` → Deletar produto  
+
+### 🏷️ **Categorias**
+- `GET /categories/` → Listar todas as categorias  
+- `POST /categories/` → Criar nova categoria  
+- `GET /categories/{category_id}` → Buscar categoria por ID  
+- `PUT /categories/{category_id}` → Atualizar categoria  
+- `DELETE /categories/{category_id}` → Deletar categoria  
+
+---
+
+## 🧭 Próximos Passos (Roadmap)
+
+- [ ] 🔗 **Relacionamentos Avançados** — Refinar vínculos entre entidades  
+- [ ] 🧾 **Testes Automatizados** — Implementar testes unitários e de integração  
+
+---
+
+## ⚡ Como Executar Localmente
+
+```bash
+# Clone o repositório
+git clone https://github.com/rafaeldourado8/ecommerceapp.git
+cd ecommerceapp
+
+# Suba os containers
+docker-compose up -d
+
+# Acesse a documentação Swagger
+http://localhost:8000/docs
+```
+
+---
+
+## 👨‍💻 Autor
+
+**Rafael Dourado**  
+Desenvolvedor Back-end Python  
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rafaeldourado8/)  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rafael-dourado-dev/)
+
+---
+
+<p align="center">
+  <em>“Construído com 💙 e FastAPI para impulsionar o futuro do comércio digital.”</em>
+</p>
