@@ -2,6 +2,7 @@ from . import models
 from . import schema 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import joinedload 
 
 async def create_new_product(request: schema.Product, database: AsyncSession) -> models.Product:
     new_product = models.Product(
@@ -15,16 +16,34 @@ async def create_new_product(request: schema.Product, database: AsyncSession) ->
     database.add(new_product)
     await database.commit()
     await database.refresh(new_product)
-    return new_product
+    
+
+    query = (
+        select(models.Product)
+        .where(models.Product.id == new_product.id)
+        .options(joinedload(models.Product.category))
+    )
+    result = await database.execute(query)
+    final_product = result.scalars().first()
+    
+    return final_product
 
 async def list_all_products(database: AsyncSession) -> list[models.Product]:
-    query = select(models.Product)
+
+    query = select(models.Product).options(joinedload(models.Product.category))
+    
     result = await database.execute(query)
     products = result.scalars().all()
     return products
 
 async def get_product_by_id(product_id: int, database: AsyncSession) -> models.Product:
-    query = select(models.Product).where(models.Product.id == product_id)
+
+    query = (
+        select(models.Product)
+        .where(models.Product.id == product_id)
+        .options(joinedload(models.Product.category))
+    )
+    
     result = await database.execute(query)
     product = result.scalars().first()
     return product
@@ -45,7 +64,16 @@ async def update_product(product_id: int, request: schema.UpdateProduct, databas
     
     await database.commit()
     await database.refresh(product)
-    return product
+
+    query = (
+        select(models.Product)
+        .where(models.Product.id == product.id)
+        .options(joinedload(models.Product.category))
+    )
+    result = await database.execute(query)
+    final_product = result.scalars().first()
+    
+    return final_product
 
 
 async def create_new_category(request: schema.Category, database: AsyncSession) -> models.Category:

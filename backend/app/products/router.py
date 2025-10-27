@@ -131,6 +131,12 @@ async def delete_category_by_id(category_id: int, database: AsyncSession = Depen
             detail=f"Categoria com id {category_id} não encontrada."
         )
 
+    if await validator.verify_category_has_products(category_id, database):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Não é possível deletar a categoria, pois ela está associada a produtos."
+        )
+
     await services.delete_category(category_id, database)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
