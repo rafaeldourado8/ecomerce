@@ -87,6 +87,10 @@ docker-compose up -d
 http://localhost:8000/docs
 ```
 
+<img width="654" height="767" alt="image" src="https://github.com/user-attachments/assets/abf4f639-a17b-4a92-ba78-0da96b8c4f47" />
+
+
+
 ---
 
 ## 👨‍💻 Autor
